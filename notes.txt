@@ -1,0 +1,93 @@
+react-hooks
+
+First released in October of 2018, the React hook APIs provide an alternative to writing class-based components, and offer an alternative approach to state management and lifecycle methods.
+Hooks bring to functional components the things we once were only able to do with classes, like being able to work with React local state, effects and context through useState, useEffect and useContext.
+Additional Hooks include: useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect and useDebugValue.
+
+Importsnt rules for hooks:
+1)Never call Hooks from inside a loop, condition or nested function
+2)Hooks should sit at the top-level of your component
+3)Only call Hooks from React functional components
+4)Never call a Hook from a regular function
+5)Hooks can call other Hooks
+
+1)useState
+Used to re render the DOM once the state changes.
+The state of your application is bound to change at some point. This could be the value of a variable, an object, or whatever type of data exists in your component.
+
+To make it possible to have the changes reflected in the DOM, we have to use a React hook called useState. It looks like this:
+
+2)useReducer 
+useState and useReducer are both hooks in react that manage state, but they handle state updates diifferently.
+The problem that useReducer hook solves is particularly relevant when you have complex state logic or when the next state depends on the previous one like there is a complex functions that changes multiples states at a time and you want a more finer control over change of each state(by specifying the actions) then you can use useReducer 
+
+
+Life Cycle of a Component : Everything that happens between the birth of a component and the death of a component
+There are 3 stages in the lifecycle
+1) Mounting - component appearing on the screen or the starting to exists in your in project
+2)Updating - the UI is changing or updating because the component has changed due a say a prop has been upated or a state inside the component has changed
+3)Unmounting - opposite of mounting
+
+Supose you have a component that loads another component based on some condition when the parent component is mounted you would see that the child component is not mounted untill the condition for mounting it is true and you can see this is developer tools. But say you have a button in the parent component and on clicking it the child component is called you would the able to see that the child component is mounted on the button click and unmounted on the again clicking the button when the condition is again set to false.
+
+VVIP
+The useEffect hook is one of most imp hooks in react
+It is use to basically control what happens depending on which stage of your component's lifecycle it is.
+We can trigger some sort of action using this hook when the component is mounting, Unmounting or updating
+
+3)useEffect :
+VVIP
+useEffect hook is just a function that would be called whenever a component is MOUNTED or UPDATED
+It is used to detect a page re render.
+But changing a state will re render the dom so useEffect will be called every single time a page changes
+In general the useEffect is called twice once at the starting when the page is loaded and then again when the data is stored in the useState hook and because of which the page re renders
+This actually happens because of the new StrictMode which is supposed to help you write better code. If you comment the strict mode you will only se the console log once. Because it basically is checking to see if you are using your useEffect hook correctly
+
+But we only want to call it once. For this you can provide an array of all the states you want to the useEffect hook to listen to. 
+So you should pass an empty array the useEffect will only be called once
+Therefore if you want to execute a function only once when the component is mounted put an empty array at the end and if you want to watch and trigger the same function every time a state or an array of state changes, put that array of states in the array at the end of the useEffect hook
+
+The RETURN function : this is a function inside the function that would be executed on mounting and updating.
+This will be executed when the component is UNMOUNTED.
+This is helpful if you want to stop a service when a component unmounts
+useEffect(() => {
+    //for mounting and updating
+  
+    return () => {
+      for unmounting
+    }
+  }, [array of state you want to watch])
+
+USE CASE : fetch the data from an api as soon as a component mounts.
+
+React.StrictMode : 
+It is a way of React to help us write better code.
+React has a set of rules that will check if your following those rules or not. Always keep it on
+In StrictMode the component mounts first than it is unmounted and then again mounted
+This is just to check if you have written your code correctly or not or if you have any memory leaks in your code.
+
+Fetching data from API:
+1) Using the fetch api call 
+
+the incoming data will be in json so you have to first convert it into a Javascript Object
+fetch("https://link")
+.then((res) => res.json)
+.then((data) =>{
+  console.log(data)
+})
+
+2)Axios - easier way
+library that allows to fetch data
+
+Axios.get("http://link)
+.then((res) => {
+   console.log(res.data)
+})
+
+
+VVVIP                                 VVVIP                           VVVIP
+This is actually not a good way to use Axios because this will be called every single time a component re-renders
+So what will happen is every time an api is called, we will try to save that data in a state maybe which is basically changing that state and this will trigger a re-render of that component and because the axios will be called every time a component is re-renders this will spiral into an infinite loop 
+
+This is a very very good use case of useEffect because then we could put this axios call inside the useEffect hook and also specify an empty array in the end of useEffect stating that we dont want to watch over any state change and we only want to  make an api call every time the component re-renders but the state change anomaly will be handled beacuse of the empty array
+But still axios will be executed twice because of the useEffect side effect of mounting unmounting and then again mounting. There is a way to avoid this as well please look into it   
